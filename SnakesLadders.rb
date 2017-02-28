@@ -24,7 +24,7 @@ class SnakesLadders
     turnAction(@command)
   end
   
-  #Model for turn action - rolls dice, moves player, switches player
+  #Model for turn action - rolls dice, moves player
   def turnAction(command)   
     if command == "r"
       #needs to be a Lambda so it continues through rest of code
