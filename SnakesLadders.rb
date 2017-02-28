@@ -18,7 +18,7 @@ class SnakesLadders
   #Adds some interactivity for players and allows them to quit
   def turnPrompt
   	turn = @@playerTurn 
-    puts "It is Player #{turn += 1}\'s turn."
+    puts "\nIt is Player #{turn += 1}\'s turn."
     puts "Type \"r\" to roll your dice!"
     puts "Type \"e\" to exit."
     @command = gets.downcase.chomp
@@ -58,7 +58,7 @@ class SnakesLadders
 	   	if @@player1 > 100
 	   		@@movespaces = -(@@player1 % 100)
 	   		@@player1 += @@moveSpaces
-	   		puts "Player 1 bounced back #{@@moveSpaces} spaces becasue they didn't hit 100 exactly."
+	   		puts "Player 1 bounced back #{@@moveSpaces} spaces because they didn't hit 100 exactly."
 	   	elsif @@player1 == 100
 	   		puts "Player 1 won! Thank you for playing."
 	   		exit
@@ -80,7 +80,7 @@ class SnakesLadders
 	   	if @@player2 > 100
 	   		@@movespaces = -(@@player2 % 100)
 	   		@@player2 += @@moveSpaces
-	   		puts "Player 2 bounced back #{@@moveSpaces} becasue they didn't hit 100 exactly."
+	   		puts "Player 2 bounced back #{@@moveSpaces} because they didn't hit 100 exactly."
 	   	elsif @@player2 == 100
 	   		puts "Player 2 won! Thank you for playing."
 	   		exit
