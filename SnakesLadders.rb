@@ -1,4 +1,5 @@
-#Main class for game with all logic and objects
+## Project based on CodeWars Kata with a bit of extended scope! https://www.codewars.com/kata/snakes-and-ladders-1
+# This is the main class for game with all logic and objects
 
 class SnakesLadders
   def initialize
@@ -27,7 +28,6 @@ class SnakesLadders
   #Model for turn action - rolls dice, moves player
   def turnAction(command)   
     if command == "r"
-      #needs to be a Lambda so it continues through rest of code
       diceRoll
       puts "You rolled a #{@@die1} and #{@@die2}."
       play
