@@ -4,32 +4,45 @@
 class SnakesLadders
   def initialize
     puts "Welcome to Snakes and Ladders!"
-    createPlayers
+    playerNumber
     turnPrompt
   end
-   
-  #Players as class variables with starting position of 0
+
+  def playerNumber
+    puts "How many people are playing?"
+    @@n = gets.chomp.to_i
+    while (@@n.is_a? String) || (@@n < 1)
+      puts "Please enter a number of players"
+      @@n = gets.chomp.to_i
+    end
+    createPlayers
+  end
+
+  #Actually creates player positions in array with starting position of 0
   def createPlayers
-    @@player1 = 0
-    @@player2 = 0
+    @@playerArray = Array.new(@@n, 0)
+    puts "Players = #{@@playerArray}"
+    #sets player turn to Player 1 for first turn
     @@playerTurn = 0
   end 
   
   #Adds some interactivity for players and allows them to quit
   def turnPrompt
-  	turn = @@playerTurn 
-    puts "\nIt is Player #{turn += 1}\'s turn."
+  	@@turn = @@playerTurn + 1
+    puts "\nIt is Player #{@@turn}\'s turn."
     puts "Type \"r\" to roll your dice!"
     puts "Type \"e\" to exit."
     @command = gets.downcase.chomp
     turnAction(@command)
+        puts "----PlayerTurn at end turnPrompt is #{@@playerTurn}\n Turn is #{@@turn}"
+
   end
   
   #Model for turn action - rolls dice, moves player
   def turnAction(command)   
     if command == "r"
       diceRoll
-      puts "You rolled a #{@@die1} and #{@@die2}."
+      puts "Player #{@@turn} rolled a #{@@die1} and #{@@die2}."
       play
       move
       turnPrompt
@@ -50,174 +63,144 @@ class SnakesLadders
   end
 
   def move
-  	turn = @@playerTurn 
-  	case @@playerTurn
-	   when 0
-	   	@@player1 += @@moveSpaces
-	   	#Check for bounce on end of board or a win
-	   	if @@player1 > 100
-	   		@@movespaces = -(@@player1 % 100)
-	   		@@player1 += @@moveSpaces
-	   		puts "Player 1 bounced back #{@@moveSpaces} spaces because they didn't hit 100 exactly."
-	   	elsif @@player1 == 100
-	   		puts "Player 1 won! Thank you for playing."
-	   		exit
-	   	end
-	   	#check if they hit a Snake or Ladder
-	   	snakeOrLadder
-	   		unless @@ladder || @@snake 
-	   			puts "Player #{turn += 1} is now on space #{@@player1}"
-	   		end
-	   		#check for double roll
-		   	if @@die1 == @@die2 
-		   		puts "You rolled a double so you've got another go!" 
-		   	else 
-		   		playerSwitch 
-		   	end
-	   when 1
-	   	@@player2 += @@moveSpaces
-	   	#Check for bounce on end of board or a win
-	   	if @@player2 > 100
-	   		@@movespaces = -(@@player2 % 100)
-	   		@@player2 += @@moveSpaces
-	   		puts "Player 2 bounced back #{@@moveSpaces} because they didn't hit 100 exactly."
-	   	elsif @@player2 == 100
-	   		puts "Player 2 won! Thank you for playing."
-	   		exit
-	   	end
-	   	#check if they hit a Snake or Ladder
-	   	snakeOrLadder
-	   		unless @@ladder || @@snake
-	   			puts "Player #{turn += 1} is now on space #{@@player2}"
-	   		end
-	   		#check for double roll
-		   	if @@die1 == @@die2 
-		   		puts "You rolled a double so you've got another go!" 
-		   	else 
-		   		playerSwitch 
-		   	end
-	   else 
-	   	puts "player turn error"
+    @position = @@playerArray[@@playerTurn] + @@moveSpaces
+   	#Check for bounce on end of board or a win
+   	if @position > 100
+   		@@movespaces = -(@position % 100)
+   		@position += @@moveSpaces
+   		puts "Player #{@@turn} bounced back #{@@moveSpaces} spaces because they didn't hit 100 exactly."
+   	elsif @position == 100
+   		puts "Player #{@@turn} won! Thank you for playing."
+   		exit
+   	end
+
+   	#check if they hit a Snake or Ladder
+   	snakeOrLadder(@position)
+ 		unless @@ladder || @@snake 
+      #update the actual array value if it hasn't been updated already through SnakeOrLadder
+      @@playerArray[@@playerTurn] = @position
+ 			puts "Player #{@@turn} is now on space #{@@playerArray[@@playerTurn]}"
+ 		end
+
+ 		#check for double roll
+   	if @@die1 == @@die2 
+   		puts "Player #{@@turn} rolled a double so has got another go!" 
+   	else 
+   		playerSwitch 
    	end
   end
 
-  def snakeOrLadder
+  def snakeOrLadder(position)
   	@@ladder = false
   	@@snake = false
+  	#passes player position to the case switch so that we don't need to copy out for each player
+  	endPosition = position
 
-  	#passes player turn to the case switch so that we don't need to copy out for each player
-  	if @@playerTurn == 0
-  		endPosition = @@player1
-  	elsif @@playerTurn == 1
-  		endPosition = @@player2
-  	end
-
-#Ladders
+    #Ladders
   	case endPosition 
   	when 2
   		endPosition = 38
   		@@ladder =true
-  		puts "You landed on a Ladder and moved up to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a Ladder and moved up to square #{endPosition}"
   	when 7
   		endPosition = 14
   		@@ladder =true
-  		puts "You landed on a Ladder and moved up to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a Ladder and moved up to square #{endPosition}"
   	when 8
   		endPosition = 31
   		@@ladder =true
-  		puts "You landed on a Ladder and moved up to square #{endPosition}"
-	when 15
+  		puts "Player #{@@turn} landed on a Ladder and moved up to square #{endPosition}"
+	  when 15
   		endPosition = 26
   		@@ladder =true
-  		puts "You landed on a Ladder and moved up to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a Ladder and moved up to square #{endPosition}"
   	when 21
   		endPosition = 42
   		@@ladder =true
-  		puts "You landed on a Ladder and moved up to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a Ladder and moved up to square #{endPosition}"
   	when 28
   		endPosition = 84
   		@@ladder =true
-  		puts "You landed on a Ladder and moved up to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a Ladder and moved up to square #{endPosition}"
   	when 36
   		endPosition = 44
   		@@ladder =true
-  		puts "You landed on a Ladder and moved up to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a Ladder and moved up to square #{endPosition}"
   	when 51
   		endPosition = 67
   		@@ladder =true
-  		puts "You landed on a Ladder and moved up to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a Ladder and moved up to square #{endPosition}"
   	when 71
   		endPosition = 91
   		@@ladder =true
-  		puts "You landed on a Ladder and moved up to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a Ladder and moved up to square #{endPosition}"
   	when 78
   		endPosition = 98
   		@@ladder =true
-  		puts "You landed on a Ladder and moved up to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a Ladder and moved up to square #{endPosition}"
   	when 87
   		endPosition = 94
   		@@ladder =true
-  		puts "You landed on a Ladder and moved up to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a Ladder and moved up to square #{endPosition}"
   	end
 
-#Snakes
+    #Snakes
   	case endPosition
   	when 16
   		endPosition = 6
   		@@snake = true
-  		puts "You landed on a snake and moved back to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a snake and moved back to square #{endPosition}"
   	when 46
   		endPosition = 25
   		@@snake = true
-  		puts "You landed on a snake and moved back to square #{endPosition}" 		
+  		puts "Player #{@@turn} landed on a snake and moved back to square #{endPosition}" 		
   	when 49
   		endPosition = 11
   		@@snake = true
-  		puts "You landed on a snake and moved back to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a snake and moved back to square #{endPosition}"
   	when 62
   		endPosition = 19
   		@@snake = true
-  		puts "You landed on a snake and moved back to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a snake and moved back to square #{endPosition}"
   	when 64
   		endPosition = 58
   		@@snake = true
-  		puts "You landed on a snake and moved back to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a snake and moved back to square #{endPosition}"
   	when 74
   		endPosition = 53
   		@@snake = true
-  		puts "You landed on a snake and moved back to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a snake and moved back to square #{endPosition}"
   	when 89
   		endPosition = 68
   		@@snake = true
-  		puts "You landed on a snake and moved back to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a snake and moved back to square #{endPosition}"
   	when 92
   		endPosition = 88
   		@@snake = true
-  		puts "You landed on a snake and moved back to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a snake and moved back to square #{endPosition}"
   	when 95
   		endPosition = 75
   		@@snake = true
-  		puts "You landed on a snake and moved back to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a snake and moved back to square #{endPosition}"
   	when 99
   		endPosition = 78
   		@@snake = true
-  		puts "You landed on a snake and moved back to square #{endPosition}"
+  		puts "Player #{@@turn} landed on a snake and moved back to square #{endPosition}"
   	end
 
-  	#update player positions
-  	if @@playerTurn == 0
-  		@@player1 = endPosition
-  	elsif @@playerTurn == 1
-  		@@player2 = endPosition
-  	end
-
+  	#update player positions in array
+  	@@playerArray[@@playerTurn] = endPosition
   end	
   
   def playerSwitch
-    if @@playerTurn == 0
-    	@@playerTurn = 1
-    elsif @@playerTurn == 1
+    #moves turn to next player
+    if @@turn < @@n
+    	@@playerTurn += 1
+    #re-starts player round
+    elsif @@turn == @@n
     	@@playerTurn = 0
+      winningPlayer = @@playerArray.sort.reverse
+      @@playerArray.each {|n| puts "Player #{@@playerArray.index(n)} is winning!" if n == winningPlayer[0]} 
     else
     	puts "Error with player turns. We've reset it to Player 1."
     	@@playerTurn = 0
