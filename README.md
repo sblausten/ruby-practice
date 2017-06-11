@@ -8,7 +8,7 @@ My first proper ruby program built completely on my own.
 
 ```bash
 git clone https://github.com/sblausten/snakes-ladders.git
-cd snakes-ladders
+cd snakes-ladders/snakesladders
 ruby SnakesLaddersMultiplayer.rb
 ```
 
