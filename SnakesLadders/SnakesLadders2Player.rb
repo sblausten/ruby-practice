@@ -14,18 +14,8 @@ class SnakesLadders
     snakeOrLadder
     checkWin
     positionEnd
-    if @player_turn == 0
-        #set variables for result readout
-        return "Player 1 is on square #{@player1}"
-    elsif @player_turn == 1
-        #set variables for result readout
-        return "Player 2 is on square #{@player2}"
-    end
-    #check for double roll
-    unless x == y
-      #puts "Player #{@player_turn} rolled a double so has got another go!" 
-      turnSwitch
-    end
+    result
+    checkDoubleRoll
   end
   
   def turnSwitch 
@@ -37,7 +27,6 @@ class SnakesLadders
   end
   
   def positionStart 
-    #set player turn if it doesn't already exist
     @player_turn ||=  0
     
     if @player_turn == 0
@@ -101,6 +90,13 @@ class SnakesLadders
     end
   end 
   
+  def checkDoubleRoll
+    unless x == y
+      puts "Player #{@player_turn} rolled a double so has got another go!" 
+      turnSwitch
+    end
+  end
+  
   def checkWin
     if @position > 100
       @movespaces = -(@position %= 100)
@@ -122,11 +118,9 @@ class SnakesLadders
   
   def result
     if @player_turn == 0
-        #set variables for result readout
         return "Player 1 is on square #{@player1}"
     elsif @player_turn == 1
-        #set variables for result readout
-        return "Player 2 is on square #{@player2}"
+       return "Player 2 is on square #{@player2}"
     end
     
   end
